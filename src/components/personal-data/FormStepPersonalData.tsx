@@ -1,25 +1,18 @@
 import {
   Box,
   Flex,
-  Heading,
   Hide,
   IconButton,
   Image,
   Stack,
-  Text,
-  useBreakpointValue,
 } from '@chakra-ui/react'
 import { Form } from './Form'
+import { StepLayout } from '../../layouts/StepLayout'
+import { FormHeading } from '../FormHeading'
 
 export const FormStepPersonalData = () => {
-  const marginValue = useBreakpointValue({
-    base: '0', // Margen para pantallas pequeñas
-    sm: '0',  // Mantén el margen en 0 para pantallas pequeñas
-    md: '0',  // Mantén el margen en 0 para pantallas medianas
-    lg: '7.875rem', // Margen para pantallas grandes y superiores
-  });
   return (
-    <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
+    <StepLayout>
       <Flex
         flex={1}
         justifyContent={'center'}
@@ -61,16 +54,10 @@ export const FormStepPersonalData = () => {
 
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
         <Stack spacing={6} w={'full'} maxW={'2xl'}>
-          <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
-            <Image alt="Brand" src="/brand.svg" mb="2.78125rem" />
-            <Text fontWeight={'bold'} fontSize={'24px'} as={'span'}>
-              Registro
-            </Text>{' '}
-          </Heading>
+          <FormHeading text="Registro" />
           <Form />
-          
         </Stack>
       </Flex>
-    </Stack>
+    </StepLayout>
   )
 }

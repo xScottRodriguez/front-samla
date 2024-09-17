@@ -174,8 +174,10 @@ export const Form = () => {
           </FormHelperText>
         )}
       </FormControl>
-
+      <Stack direction={{ base: 'column',md: 'row' }} spacing={4}>
+        
       <StepButton handleSubmit={handleSubmit(onSubmit)} />
+      </Stack>
     </Stack>
   )
 }
