@@ -1,21 +1,16 @@
-import {
-  Box,
-} from '@chakra-ui/react'
-import { useState } from 'react'
+import { Box } from '@chakra-ui/react'
 import { FormStepPersonalData } from './personal-data'
 import { AddressForm } from './AddressForm'
 import { SelfieForm } from './SelfieForm'
+import { useAppSelector } from '../hooks'
 
 export default function Multistep() {
-  // const toast = useToast()
-  const [step, _setStep] = useState(1)
-  // const [progress, setProgress] = useState(33.33)
+  const { step } = useAppSelector((state) => state.ui)
 
   return (
     <>
       <Box as="form">
-     
-        {step === 1 ? (
+        {step   === 1 ? (
           <FormStepPersonalData />
         ) : step === 2 ? (
           <AddressForm />

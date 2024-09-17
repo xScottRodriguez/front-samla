@@ -1,11 +1,28 @@
-import { Box, useColorModeValue } from '@chakra-ui/react';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
+import { Box, useColorModeValue } from '@chakra-ui/react'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
-export const PhoneNumberInput = () => {
-  const inputBg = useColorModeValue('white', 'gray.700');
-  const inputBorder = useColorModeValue('gray.300', 'gray.600');
-  const focusBorder = useColorModeValue('#3182ce', '#90cdf4'); // Chakra's default blue
+interface PhoneNumberInputProps {
+  value?: string
+  onChange?: (value: string) => void
+  inputStyle?: React.CSSProperties
+  country?: string
+  enableSearch?: boolean
+  isInvalid?: boolean
+}
+
+export const PhoneNumberInput = ({
+  value,
+  onChange,
+  inputStyle,
+  country = 'sv',
+  enableSearch = true,
+  isInvalid = false, // Valor por defecto
+}: PhoneNumberInputProps) => {
+  const inputBg = useColorModeValue('white', 'gray.700')
+  const inputBorder = useColorModeValue('gray.300', 'gray.600')
+  const focusBorder = useColorModeValue('#3182ce', '#90cdf4')
+  const invalidBorder = useColorModeValue('red.500', 'red.300') // Borde para error, usando colores de Chakra
 
   return (
     <Box
@@ -15,37 +32,36 @@ export const PhoneNumberInput = () => {
         },
         '.react-tel-input .flag-dropdown': {
           background: inputBg,
-          borderColor: inputBorder,
+          borderColor: isInvalid ? invalidBorder : inputBorder,
           borderRight: 'none',
         },
         '.react-tel-input input': {
           width: '100%',
-          paddingLeft: '58px', // Espacio para el código de país
+          paddingLeft: '58px',
           background: inputBg,
           borderRadius: 'var(--chakra-radii-md)',
-          borderColor: inputBorder,
-          height: 'var(--chakra-sizes-10)', // Asegura altura uniforme
+          borderColor: isInvalid ? invalidBorder : inputBorder,
+          height: 'var(--chakra-sizes-10)',
           fontSize: 'var(--chakra-fontSizes-md)',
           transition: 'var(--chakra-transition-duration-normal)',
           _hover: {
-            borderColor: 'blue.500', // Borde al hacer hover
+            borderColor: 'blue.500',
           },
           _focusVisible: {
             zIndex: 1,
-            borderColor: focusBorder, // Borde de enfoque de Chakra
-            boxShadow: `0 0 0 1px ${focusBorder}`, // Sombra cuando se enfoca
+            borderColor: isInvalid ? invalidBorder : focusBorder,
+            boxShadow: `0 0 0 1px ${isInvalid ? invalidBorder : focusBorder}`,
           },
         },
       }}
     >
       <PhoneInput
-        country={'sv'} // El Salvador (+503) por defecto
-        inputStyle={{
-          // Si deseas manejar los estilos solo desde Chakra, puedes eliminar esto
-          width: '100%',
-        }}
-        enableSearch
+        country={country}
+        value={value}
+        onChange={onChange}
+        inputStyle={inputStyle}
+        enableSearch={enableSearch}
       />
     </Box>
-  );
-};
+  )
+}

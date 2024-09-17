@@ -1,5 +1,5 @@
 import {
-  Button,
+  Box,
   Flex,
   Heading,
   Hide,
@@ -7,10 +7,17 @@ import {
   Image,
   Stack,
   Text,
+  useBreakpointValue,
 } from '@chakra-ui/react'
 import { Form } from './Form'
 
 export const FormStepPersonalData = () => {
+  const marginValue = useBreakpointValue({
+    base: '0', // Margen para pantallas pequeñas
+    sm: '0',  // Mantén el margen en 0 para pantallas pequeñas
+    md: '0',  // Mantén el margen en 0 para pantallas medianas
+    lg: '7.875rem', // Margen para pantallas grandes y superiores
+  });
   return (
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
       <Flex
@@ -23,67 +30,45 @@ export const FormStepPersonalData = () => {
         backgroundPosition="center"
         zIndex={0}
       >
-        <Image
-          alt={'Login Image'}
-          src={'/assets/step-1.svg'}
-          position="relative"
-          // Uso de margin en pantallas grandes y padding en pantallas pequeñas
-          margin={{ base: 0, md: '8.875rem' }} // Usar padding en lugar de margin en pantallas pequeñas
-          padding={{ base: '2rem', md: 0 }}
-          display="block"
-        />
-        <Hide below="2xl">
-          <IconButton
-            aria-label="thunderbolt"
-            borderRadius={'50%'}
-            icon={
-              <Image
-                src="/assets/thunderbolt-1.svg"
-                alt="thunderbolt"
-                boxSize="1.5rem"
-              />
-            }
-            position="absolute"
-            left={{
-              base: '10%',
-              md: '10%',
-              lg: '26%',
-            }}
-            top="44%"
-            transform="translateY(-50%)"
+        <Box position="relative" display="inline-block">
+          <Image
+            alt={'Login Image'}
+            src={'/assets/step-1.svg'}
+            position="relative"
+            // margin={marginValue}
+            padding={['1.5rem', '1.5rem', '1.5rem', '1.875rem']}
+            display="block"
           />
-        </Hide>
+
+          <Hide below="2xl">
+            <IconButton
+              aria-label="thunderbolt"
+              borderRadius={'50%'}
+              position={'absolute'}
+              top={'41%'}
+              left={'1%'}
+              icon={
+                <Image
+                  src="/assets/thunderbolt-1.svg"
+                  alt="thunderbolt"
+                  boxSize="1.5rem"
+                />
+              }
+            />
+          </Hide>
+        </Box>
       </Flex>
+
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
         <Stack spacing={6} w={'full'} maxW={'2xl'}>
           <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
-            <Text as={'h1'} position={'relative'}>
-              Sam
-              <span
-                style={{
-                  color: '#0D65FD',
-                }}
-              >
-                la
-              </span>
-            </Text>
+            <Image alt="Brand" src="/brand.svg" mb="2.78125rem" />
             <Text fontWeight={'bold'} fontSize={'24px'} as={'span'}>
               Registro
             </Text>{' '}
           </Heading>
           <Form />
-          <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
-            <Button
-              w="full"
-              bg={'brand.500'}
-              color={'white'}
-              _hover={{
-                bg: 'brand.6`00',
-              }}
-            >
-             Continuar
-            </Button>
-          </Stack>
+          
         </Stack>
       </Flex>
     </Stack>
