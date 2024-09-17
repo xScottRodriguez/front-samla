@@ -7,7 +7,8 @@ import {
   Image,
   Stack,
   Text,
-} from '@chakra-ui/react';
+} from '@chakra-ui/react'
+import { Form } from './Form'
 
 export const FormStepPersonalData = () => {
   return (
@@ -25,11 +26,13 @@ export const FormStepPersonalData = () => {
         <Image
           alt={'Login Image'}
           src={'/assets/step-1.svg'}
-          position="absolute"
-          margin="8.875rem"
+          position="relative"
+          // Uso de margin en pantallas grandes y padding en pantallas pequeñas
+          margin={{ base: 0, md: '8.875rem' }} // Usar padding en lugar de margin en pantallas pequeñas
+          padding={{ base: '2rem', md: 0 }}
           display="block"
         />
-        <Hide below="2xl"> {/* Usa el breakpoint personalizado */}
+        <Hide below="2xl">
           <IconButton
             aria-label="thunderbolt"
             borderRadius={'50%'}
@@ -52,48 +55,37 @@ export const FormStepPersonalData = () => {
         </Hide>
       </Flex>
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
-        <Stack spacing={6} w={'full'} maxW={'lg'}>
+        <Stack spacing={6} w={'full'} maxW={'2xl'}>
           <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
-            <Text
-              as={'span'}
-              position={'relative'}
-              _after={{
-                content: "''",
-                width: 'full',
-                height: '30%',
-                position: 'absolute',
-                bottom: 1,
-                left: 0,
-                bg: 'blue.400',
-                zIndex: -1,
-              }}
-            >
-              Freelance
+            <Text as={'h1'} position={'relative'}>
+              Sam
+              <span
+                style={{
+                  color: '#0D65FD',
+                }}
+              >
+                la
+              </span>
             </Text>
-            <br />{' '}
-            <Text color={'blue.400'} as={'span'}>
-              Design Projects
+            <Text fontWeight={'bold'} fontSize={'24px'} as={'span'}>
+              Registro
             </Text>{' '}
           </Heading>
-          <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-            The project board is an exclusive resource for contract work.
-            It&apos;s perfect for freelancers, agencies, and moonlighters.
-          </Text>
+          <Form />
           <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
             <Button
-              rounded={'full'}
-              bg={'blue.400'}
+              w="full"
+              bg={'brand.500'}
               color={'white'}
               _hover={{
-                bg: 'blue.500',
+                bg: 'brand.6`00',
               }}
             >
-              Create Project
+             Continuar
             </Button>
-            <Button rounded={'full'}>How It Works</Button>
           </Stack>
         </Stack>
       </Flex>
     </Stack>
-  );
-};
+  )
+}

@@ -1,19 +1,15 @@
 import {
   Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  useToast,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { FormStepPersonalData } from './FormStepPersonalData'
+import { FormStepPersonalData } from './personal-data'
 import { AddressForm } from './AddressForm'
 import { SelfieForm } from './SelfieForm'
 
 export default function Multistep() {
-  const toast = useToast()
-  const [step, setStep] = useState(1)
-  const [progress, setProgress] = useState(33.33)
+  // const toast = useToast()
+  const [step, _setStep] = useState(1)
+  // const [progress, setProgress] = useState(33.33)
 
   return (
     <>
