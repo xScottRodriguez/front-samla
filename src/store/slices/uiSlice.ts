@@ -7,7 +7,7 @@ interface IUiState {
 
 // Define the initial state using that type
 const initialState: IUiState = {
-  step: 1,
+  step: 3,
 }
 
 export const uiSlice = createSlice({

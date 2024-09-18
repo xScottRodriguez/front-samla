@@ -1,79 +1,35 @@
-import {
-  Heading,
-  SimpleGrid,
-  FormControl,
-  GridItem,
-  FormLabel,
-  InputGroup,
-  InputLeftAddon,
-  Input,
-  Textarea,
-  FormHelperText,
-} from '@chakra-ui/react'
+import { Box, Button, Flex, Image, Text } from '@chakra-ui/react'
 
 export const SelfieForm = () => {
   return (
-    <>
-      <Heading w="100%" textAlign={'center'} fontWeight="normal">
-        Social Handles
-      </Heading>
-      <SimpleGrid columns={1} spacing={6}>
-        <FormControl as={GridItem} colSpan={[3, 2]}>
-          <FormLabel
-            fontSize="sm"
-            fontWeight="md"
-            color="gray.700"
-            _dark={{
-              color: 'gray.50',
-            }}
-          >
-            Website
-          </FormLabel>
-          <InputGroup size="sm">
-            <InputLeftAddon
-              bg="gray.50"
-              _dark={{
-                bg: 'gray.800',
-              }}
-              color="gray.500"
-              rounded="md"
-            >
-              http://
-            </InputLeftAddon>
-            <Input
-              type="tel"
-              placeholder="www.example.com"
-              focusBorderColor="brand.400"
-              rounded="md"
-            />
-          </InputGroup>
-        </FormControl>
+    <Flex minH={'100vh'} justifyContent={'center'} alignItems={'center'}>
+      <Box textAlign="center" width="100%" maxW="400px" mx="auto">
+        <Image alt="Brand" src="/brand.svg" mx="auto" />
+        <Image
+          alt="photo camera"
+          src="/assets/photo-camera.svg"
+          mx="auto"
+          my="2.721875rem"
+        />
+        <Text fontWeight={'bold'} fontSize={'1.5rem'}>
+          ¡Es hora de la selfie!
+        </Text>
+        <Text>Sonríe y asegúrate de tener buena iluminación.</Text>
 
-        <FormControl id="email" mt={1}>
-          <FormLabel
-            fontSize="sm"
-            fontWeight="md"
-            color="gray.700"
-            _dark={{
-              color: 'gray.50',
-            }}
-          >
-            About
-          </FormLabel>
-          <Textarea
-            placeholder="you@example.com"
-            rows={3}
-            shadow="sm"
-            focusBorderColor="brand.400"
-            fontSize={{
-              sm: 'sm',
-            }}
-          />
-          <FormHelperText>
-            Brief description for your profile. URLs are hyperlinked.
-          </FormHelperText>
-        </FormControl>
-      </SimpleGrid>
-    </>
+        <Button
+          mt={4}
+          bg={'brand.500'}
+          color={'white'}
+          _hover={{
+            bg: 'brand.600',
+          }}
+          _active={{
+            bg: 'brand.600',
+          }}
+        >
+          Continuar
+        </Button>
+      </Box>
+    </Flex>
   )
 }

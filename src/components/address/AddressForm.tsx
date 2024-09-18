@@ -6,7 +6,15 @@ import FileUpload from '../FileUpload'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { nextStep } from '../../store'
 
+interface IAddressForm {
+  region: string
+  city: string
+  address: string
+  monthlyIncome: number
+}
 const yupSchema = yup.object().shape({
   region: yup.string().required('Campo requerido'),
   city: yup.string().required('Campo requerido'),
@@ -14,15 +22,21 @@ const yupSchema = yup.object().shape({
     .string()
     .min(50, 'Direccion muy corta (< 50)')
     .required('Campo requerido'),
-    monthlyIncome: yup.number().required('Campo requerido'),
+  monthlyIncome: yup.number().required('Campo requerido'),
 })
 export const AddressForm = () => {
   const {
     control,
     formState: { errors },
-  } = useForm({
+    handleSubmit,
+  } = useForm<IAddressForm>({
     resolver: yupResolver(yupSchema),
   })
+  const dispatch = useAppDispatch()
+
+  const onSubmit = (data: IAddressForm) => {
+    dispatch(nextStep())
+  }
   return (
     <StepLayout>
       <Flex p={8} flex={1} justifyContent={'center'} alignItems={'center'}>
@@ -52,7 +66,7 @@ export const AddressForm = () => {
               _active={{
                 bg: 'brand.600',
               }}
-              // onClick={handleSubmit}
+              onClick={handleSubmit(onSubmit)}
             >
               Continuar
             </Button>
