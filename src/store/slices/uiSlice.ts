@@ -22,6 +22,7 @@ const initialState: IUiState = {
   monthlyIncome: '',
   front: null,
   back: null,
+  selfie: null,
 }
 
 export const uiSlice = createSlice({

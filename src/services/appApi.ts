@@ -14,8 +14,11 @@ const handleFormData = (body: Record<string, any>) => {
       formData.append('identificationFront', value)
     } else if (key === 'back' && value instanceof File) {
       formData.append('identificationBack', value)
+    } else if (key === 'selfie' && value instanceof File) {
+      formData.append('selfie', value)
     } else {
       if (value !== undefined && value !== null) {
+
         formData.append(key, value.toString())
       }
     }

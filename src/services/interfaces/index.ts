@@ -10,7 +10,8 @@ export interface IFormValues {
   city: string
   monthlyIncome: string
   front: File | null,
-  back: File| null,
+  back: File | null,
+  selfie: File | null
 }
 
 
