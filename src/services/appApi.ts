@@ -39,7 +39,6 @@ export const appApi = createApi({
     prepareHeaders: (headers: Headers) => {
       const token: string = getLocalStorage<string>('token')
       if (token) {
-        console.log(token)
         headers.set('Authorization', `Bearer ${token}`)
       }
       return headers
@@ -87,14 +86,11 @@ export const appApi = createApi({
         url: '/auth/registration-requests',
         method: 'GET',
       }),
-      transformResponse: (
-        response: TPagination,
-      ): TPagination | Promise<TPagination> => {
-        console.log({ response })
+      transformResponse: (response: ApiSuccess<TData[]>): TPagination<TData[]> => {
         return {
           data: response.data,
           meta: response.meta,
-        }
+        };
       },
     }),
   }),

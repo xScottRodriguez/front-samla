@@ -42,26 +42,29 @@ export const Pagination = ({ table }: { table: any }) => {
   const paginationRange = useMemo(() => {
     const totalPageNumbers = 5
     const pageNeighbours = 1
-  
+
     if (pageCount <= totalPageNumbers) {
       return Array.from({ length: pageCount }, (_, i) => i + 1)
     }
-  
+
     const startPage = Math.max(2, currentPage - pageNeighbours)
     const endPage = Math.min(pageCount - 1, currentPage + pageNeighbours)
-  
-    const pages: (number | string)[] = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i)
-  
+
+    const pages: (number | string)[] = Array.from(
+      { length: endPage - startPage + 1 },
+      (_, i) => startPage + i,
+    )
+
     if (startPage > 2) {
       pages.unshift('...')
     }
     if (endPage < pageCount - 1) {
       pages.push('...')
     }
-  
+
     return [1, ...pages, pageCount]
   }, [currentPage, pageCount])
-  
+
   return (
     <Flex justify="center" mt={4} alignItems="center" gap={2}>
       <IconButton
@@ -81,8 +84,8 @@ export const Pagination = ({ table }: { table: any }) => {
             key={index}
             onClick={() => table.setPageIndex(page - 1)}
             isActive={page === currentPage + 1}
-            variant={page === currentPage + 1 ? 'solid' : 'outline'}
-            colorScheme="blue"
+            variant={page === currentPage + 1 ? 'outline' : ''}
+            colorScheme="blue.500"
           >
             {page}
           </Button>
@@ -142,7 +145,7 @@ export const TablePlugin = <TData,>({
   return (
     <>
       <TableContainer>
-        <TableChakra variant="striped" colorScheme="brand">
+        <TableChakra colorScheme="blue">
           <Thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
@@ -173,15 +176,15 @@ export const TablePlugin = <TData,>({
               </Tr>
             )}
             {!data.length && !isFetching && (
-              <Tr>
+              <tr>
                 <Td colSpan={columns.length} textAlign="center">
                   <Text>Sin datos que mostrar</Text>
                 </Td>
-              </Tr>
+              </tr>
             )}
             {!isFetching &&
               table.getRowModel().rows.map((rowModel) => (
-                <Tr key={rowModel.id}>
+                <Tr _hover={{ bg: 'blue.50' }} key={rowModel.id}>
                   {rowModel.getVisibleCells().map((cell) => (
                     <Td key={cell.id}>
                       {flexRender(

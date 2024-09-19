@@ -25,25 +25,26 @@ export interface ApiError {
 }
 
 export interface Meta {
-  page: Page
-  total: number
+  page: Page;
+  total: number;
 }
 
 export interface Page {
-  next: null
-  prev: null
-  count: null
+  next: null;
+  prev: null;
+  count: null;
 }
 
 export interface ApiSuccess<T> {
-  status: number
-  message: string
-  data: T[] | T | null
-  errors: null
-  meta?: Meta
+  status: number;
+  message: string;
+  data: T[] | T | null;
+  errors: null;
+  meta?: Meta;
 }
 
-export type TPagination = Pick<ApiSuccess<TData>, 'meta' | 'data'>
+export type TPagination<T = any> = Pick<ApiSuccess<T>, 'meta' | 'data'>;
+
 export interface IUserResponse {
   user: User
   token: string
