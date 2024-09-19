@@ -2,24 +2,33 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Multistep } from './components'
 import { Login } from './components/login/Login'
 import { PrivateRoute } from './components/routes/PrivateRoute'
+import { PublicRoute } from './components/routes/PublicRoute'
+import { DashboardPage } from './pages/DashboardPage'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         {/* Ruta pública */}
-        <Route path="/login" element={<Login />} />
-        
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+
         {/* Ruta privada */}
         <Route
           path="/dashboard"
           element={
             <PrivateRoute>
-              <Multistep />
+              <DashboardPage />
             </PrivateRoute>
           }
         />
-        
+
         {/* Ruta pública */}
         <Route path="/" element={<Multistep />} />
       </Routes>

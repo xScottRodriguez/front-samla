@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IFormValues } from './interfaces'
-import { ApiError } from './interfaces/index'
+import { ApiError, ApiSuccess, IFormValues, IUserResponse } from './interfaces'
 const handleFormData = (body: Record<string, any>) => {
   const formData = new FormData()
 
@@ -18,7 +17,6 @@ const handleFormData = (body: Record<string, any>) => {
       formData.append('selfie', value)
     } else {
       if (value !== undefined && value !== null) {
-
         formData.append(key, value.toString())
       }
     }
@@ -32,24 +30,43 @@ export const appApi = createApi({
     baseUrl: import.meta.env.VITE_API_URL ?? 'http://localhost:5173/api',
   }),
   endpoints: (builder) => ({
-    sendRegistrationRequest: builder.mutation<IFormValues, IFormValues>({
+    sendRegistrationRequest: builder.mutation<ApiSuccess<unknown>, IFormValues>(
+      {
+        query: (body) => {
+          return {
+            url: '/auth/register',
+            method: 'POST',
+            body: handleFormData(body),
+          }
+        },
+        transformErrorResponse: ({ data }) => {
+          const error = data as ApiError
+          if (!error?.errors.length) {
+            return error.message
+          }
+
+          return error.errors.map((error) => error.msg).join(', ')
+        },
+      },
+    ),
+    signIn: builder.mutation<
+      IUserResponse,
+      { email: string; password: string }
+    >({
       query: (body) => {
         return {
-          url: '/auth/register',
+          url: '/auth/login',
           method: 'POST',
-          body: handleFormData(body),
+          body,
         }
       },
-      transformErrorResponse: ({ data }) => {
-        const error = data as ApiError
-        if (!error?.errors.length) {
-          return error.message
-        }
-
-        return error.errors.map((error) => error.msg).join(', ')
+      transformResponse: (
+        response: ApiSuccess<IUserResponse>,
+      ): IUserResponse => {
+        return response.data as IUserResponse
       },
     }),
   }),
 })
 
-export const { useSendRegistrationRequestMutation } = appApi
+export const { useSendRegistrationRequestMutation, useSignInMutation } = appApi

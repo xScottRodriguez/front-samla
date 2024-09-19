@@ -6,6 +6,6 @@ const isAuthenticated = () => {
 };
 
 
-export const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-  return isAuthenticated() ? children : <Navigate to="/login" />;
+export const PublicRoute = ({ children }: { children: JSX.Element }) => {
+  return !isAuthenticated() ? children : <Navigate to="/dashboard" />;
 };
