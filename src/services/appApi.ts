@@ -1,5 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { ApiError, ApiSuccess, IFormValues, IUserResponse } from './interfaces'
+import {
+  ApiError,
+  ApiSuccess,
+  IFormValues,
+  IUserResponse,
+  TData,
+  TPagination,
+} from './interfaces'
+import { getLocalStorage } from '../utils'
 const handleFormData = (body: Record<string, any>) => {
   const formData = new FormData()
 
@@ -28,6 +36,14 @@ export const appApi = createApi({
   reducerPath: 'appApi',
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_URL ?? 'http://localhost:5173/api',
+    prepareHeaders: (headers: Headers) => {
+      const token: string = getLocalStorage<string>('token')
+      if (token) {
+        console.log(token)
+        headers.set('Authorization', `Bearer ${token}`)
+      }
+      return headers
+    },
   }),
   endpoints: (builder) => ({
     sendRegistrationRequest: builder.mutation<ApiSuccess<unknown>, IFormValues>(
@@ -66,7 +82,26 @@ export const appApi = createApi({
         return response.data as IUserResponse
       },
     }),
+    getRegistrationRequests: builder.query<TPagination, void>({
+      query: () => ({
+        url: '/auth/registration-requests',
+        method: 'GET',
+      }),
+      transformResponse: (
+        response: TPagination,
+      ): TPagination | Promise<TPagination> => {
+        console.log({ response })
+        return {
+          data: response.data,
+          meta: response.meta,
+        }
+      },
+    }),
   }),
 })
 
-export const { useSendRegistrationRequestMutation, useSignInMutation } = appApi
+export const {
+  useSendRegistrationRequestMutation,
+  useSignInMutation,
+  useGetRegistrationRequestsQuery,
+} = appApi

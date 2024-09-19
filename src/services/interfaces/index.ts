@@ -24,36 +24,49 @@ export interface ApiError {
   }>
 }
 
+export interface Meta {
+  page: Page
+  total: number
+}
+
+export interface Page {
+  next: null
+  prev: null
+  count: null
+}
+
 export interface ApiSuccess<T> {
   status: number
   message: string
   data: T[] | T | null
   errors: null
+  meta?: Meta
 }
 
+export type TPagination = Pick<ApiSuccess<TData>, 'meta' | 'data'>
 export interface IUserResponse {
-  user:  User;
-  token: string;
+  user: User
+  token: string
 }
 
 export interface User {
-  id:    string;
-  email: string;
+  id: string
+  email: string
 }
 export interface TData {
-  _id:                  string;
-  firstName:            string;
-  lastName:             string;
-  email:                string;
-  phoneNumber:          string;
-  identificationType:   string;
-  identificationNumber: string;
-  region:               string;
-  city:                 string;
-  address:              string;
-  monthlyIncome:        number;
-  identificationFront:  string;
-  identificationBack:   string;
-  selfie:               string;
-  __v:                  number;
+  _id: string
+  firstName: string
+  lastName: string
+  email: string
+  phoneNumber: string
+  identificationType: string
+  identificationNumber: string
+  region: string
+  city: string
+  address: string
+  monthlyIncome: number
+  identificationFront: string
+  identificationBack: string
+  selfie: string
+  __v: number
 }
