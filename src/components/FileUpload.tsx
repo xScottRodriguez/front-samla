@@ -12,7 +12,7 @@ import {
 import { DividerWithCircle } from './Divider'
 
 interface FileUploadProps {
-  handler: (files: File[]) => void
+  handler: (files: { front: File | null, back: File | null }) => void
   accept?: string // Aceptar el tipo MIME permitido como una cadena
   allowedMimeTypes?: string[] // Lista de tipos MIME permitidos
 }
@@ -23,7 +23,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'],
 }) => {
   const [dragging, setDragging] = useState(false)
-  const [fileName, setFileName] = useState<string | null>(null)
+  const [fileNames, setFileNames] = useState<{ front: string | null, back: string | null }>({ front: null, back: null })
   const toast = useToast()
 
   const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
@@ -51,27 +51,46 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
     const files = e.dataTransfer.files
 
-    if (files.length !== 1) {
+    if (files.length !== 2) {
       return toast({
         title: 'Error',
-        description: 'Por favor solo arrastre un archivo',
+        description: 'Por favor solo arrastre exactamente 2 archivos',
         status: 'error',
         duration: 5000,
         isClosable: true,
       })
     }
 
-    const file = files[0]
+    const validFiles: { front: File | null, back: File | null } = { front: null, back: null }
+    const validFileNames: { front: string | null, back: string | null } = { front: null, back: null }
 
-    if (!isValidFile(file)) {
-      return
+    for (const file of files) {
+      if (isValidFile(file)) {
+        // Simplificación: Asigna los archivos según el orden de llegada
+        if (!validFiles.front) {
+          validFiles.front = file
+          validFileNames.front = file.name
+        } else {
+          validFiles.back = file
+          validFileNames.back = file.name
+        }
+      }
     }
 
-    setFileName(file.name)
-    handler([file])
+    if (validFiles.front && validFiles.back) {
+      setFileNames(validFileNames)
+      handler(validFiles)
+    } else {
+      toast({
+        title: 'Error',
+        description: 'Ambos archivos deben ser válidos y deben ser exactamente 2',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
   }
 
-  // Nueva validación basada en mimeType
   const isValidFile = (file: File) => {
     if (!allowedMimeTypes.includes(file.type)) {
       toast({
@@ -92,26 +111,35 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-
-    if (files?.length !== 1) {
-      toast({
+    if (files && files.length !== 2) {
+      return toast({
         title: 'Error',
-        description: 'Por favor seleccione solo un archivo',
+        description: 'Por favor seleccione exactamente 2 archivos',
         status: 'error',
         duration: 5000,
         isClosable: true,
       })
-      return
     }
 
-    const file = files[0]
+    const validFiles: { front: File | null, back: File | null } = { front: null, back: null }
+    const validFileNames: { front: string | null, back: string | null } = { front: null, back: null }
 
-    if (!isValidFile(file)) {
-      return
+    for (const file of files!) {
+      if (isValidFile(file)) {
+        if (!validFiles.front) {
+          validFiles.front = file
+          validFileNames.front = file.name
+        } else {
+          validFiles.back = file
+          validFileNames.back = file.name
+        }
+      }
     }
 
-    setFileName(file.name)
-    handler([file])
+    if (validFiles.front && validFiles.back) {
+      setFileNames(validFileNames)
+      handler(validFiles)
+    }
   }
 
   return (
@@ -138,6 +166,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
         id="file-upload"
         display="none"
         accept={accept}
+        multiple
         onChange={handleChange}
       />
       <Box>
@@ -148,11 +177,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
             }}
             boxSize={10}
           />
-          <Text mt={2}>Arrastrar aquí</Text>
+          <Text mt={2}>Arrastrar aquí o hacer clic para seleccionar archivos</Text>
         </Stack>
         <DividerWithCircle />
-        <Button onClick={handleClick} flexWrap={'wrap'}>Seleccionar Archivo</Button>
-        {fileName && <Text mt={4}>Archivo seleccionado: {fileName}</Text>}
+        <Button onClick={handleClick} flexWrap={'wrap'}>Seleccionar Archivos</Button>
+        {fileNames.front && fileNames.back && (
+          <Text mt={4}>Archivos seleccionados: {fileNames.front} (frontal), {fileNames.back} (trasera)</Text>
+        )}
       </Box>
     </Box>
   )

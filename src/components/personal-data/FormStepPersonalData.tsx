@@ -7,8 +7,8 @@ import {
   Stack,
 } from '@chakra-ui/react'
 import { Form } from './Form'
-import { StepLayout } from '../../layouts/StepLayout'
 import { FormHeading } from '../FormHeading'
+import { StepLayout } from '../../layouts/StepLayout'
 
 export const FormStepPersonalData = () => {
   return (

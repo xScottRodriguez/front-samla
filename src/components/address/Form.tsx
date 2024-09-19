@@ -2,19 +2,19 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Input,
   Stack,
   Textarea,
 } from '@chakra-ui/react'
 import { Select } from 'chakra-react-select'
 import { Control, Controller, FieldErrors } from 'react-hook-form'
 import { FC } from 'react'
+import { CustomNumberInput } from '../NumberInput'
 
 interface FormData {
   address: string
   region: string
   city: string
-  monthlyIncome: number
+  monthlyIncome: string
 }
 interface Props {
   control: Control<FormData>
@@ -103,7 +103,9 @@ export const Form: FC<Props> = ({ errors, control }) => {
         <Controller
           name="monthlyIncome"
           control={control}
-          render={({ field }) => <Input {...field} placeholder='0.00' />}
+          render={({ field }) => (
+            <CustomNumberInput {...field}  />
+          )}
         />
         {errors.monthlyIncome && (
           <FormHelperText color={'red.500'}>

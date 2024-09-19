@@ -13,10 +13,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Select } from 'chakra-react-select'
 import { StepButton } from '../StepButton'
 import { useDispatch } from 'react-redux'
-import { nextStep } from '../../store/slices/uiSlice'
+import { nextStep, setPersonalData } from '../../store'
 const yupSchema = yup.object().shape({
-  names: yup.string().required('Campo requerido'),
-  lastNames: yup.string().required('Campo requerido'),
+  firstName: yup.string().required('Campo requerido'),
+  lastName: yup.string().required('Campo requerido'),
   email: yup.string().email('Correo inválido').required('Campo requerido'),
   phoneNumber: yup.string().required('Campo requerido'),
   identificationType: yup.string().required('Campo requerido'),
@@ -24,8 +24,8 @@ const yupSchema = yup.object().shape({
 })
 
 interface FormValues {
-  names: string
-  lastNames: string
+  firstName: string
+  lastName: string
   email: string
   phoneNumber: string
   identificationType: string
@@ -44,46 +44,47 @@ export const Form = () => {
 
   const onSubmit = (data: FormValues) => {
     dispatch(nextStep())
+    dispatch(setPersonalData(data))
   }
   return (
     <Stack as="form">
       <FormControl my={2}>
         <FormLabel>Nombres</FormLabel>
         <Controller
-          name="names"
+          name="firstName"
           control={control}
           render={({ field }) => (
             <Input
               size="lg"
-              isInvalid={!!errors.names}
+              isInvalid={!!errors.firstName}
               placeholder="Ingresar Nombres"
               {...field}
             />
           )}
         />
-        {errors.names && (
+        {errors.firstName && (
           <FormHelperText color="red.500">
-            {errors.names.message}
+            {errors.firstName.message}
           </FormHelperText>
         )}
       </FormControl>
       <FormControl my={2}>
         <FormLabel>Apellidos</FormLabel>
         <Controller
-          name="lastNames"
+          name="lastName"
           control={control}
           render={({ field }) => (
             <Input
               size="lg"
-              isInvalid={!!errors.names}
+              isInvalid={!!errors.lastName}
               placeholder="Ingresar Apellidos"
               {...field}
             />
           )}
         />
-        {errors.lastNames && (
+        {errors.lastName && (
           <FormHelperText color="red.500">
-            {errors.lastNames.message}
+            {errors.lastName.message}
           </FormHelperText>
         )}
       </FormControl>
@@ -95,7 +96,7 @@ export const Form = () => {
           render={({ field }) => (
             <Input
               size="lg"
-              isInvalid={!!errors.names}
+              isInvalid={!!errors.email}
               placeholder="Ingresar Correo"
               {...field}
             />

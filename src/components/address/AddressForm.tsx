@@ -6,23 +6,23 @@ import FileUpload from '../FileUpload'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { nextStep } from '../../store'
+import { useAppDispatch } from '../../hooks'
+import { nextStep, setPersonalData } from '../../store'
 
 interface IAddressForm {
   region: string
   city: string
   address: string
-  monthlyIncome: number
+  monthlyIncome: string
 }
 const yupSchema = yup.object().shape({
   region: yup.string().required('Campo requerido'),
   city: yup.string().required('Campo requerido'),
   address: yup
     .string()
-    .min(50, 'Direccion muy corta (< 50)')
+    .min(35, 'Direccion muy corta (< 35)')
     .required('Campo requerido'),
-  monthlyIncome: yup.number().required('Campo requerido'),
+  monthlyIncome: yup.string().required('Campo requerido'),
 })
 export const AddressForm = () => {
   const {
@@ -36,6 +36,12 @@ export const AddressForm = () => {
 
   const onSubmit = (data: IAddressForm) => {
     dispatch(nextStep())
+    dispatch(setPersonalData(data))
+  }
+
+  const handleFileUpload = (files: { front: File | null, back: File | null }) => { 
+    
+    dispatch(setPersonalData({ front: files.front, back: files.back }))
   }
   return (
     <StepLayout>
@@ -50,7 +56,7 @@ export const AddressForm = () => {
           <Text fontWeight={'bold'} fontSize={'24px'} as={'span'}>
             Fotografía de documento de identidad
           </Text>
-          <FileUpload handler={() => {}} />
+          <FileUpload handler={handleFileUpload} />
           <Stack flexDir={'row'} justify={'flex-end'}>
             <Button size={'lg'} w="fit-content">
               Cancelar

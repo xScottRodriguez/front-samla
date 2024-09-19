@@ -1,6 +1,32 @@
-import { Box, Button, Flex, Image, Text } from '@chakra-ui/react'
-
+import { Box, Button, Flex, Image, Text, useToast } from '@chakra-ui/react'
+import { useAppSelector } from '../hooks'
+import { IUiState } from '../store'
+import { useSendRegistrationRequestMutation } from '../services'
 export const SelfieForm = () => {
+  const toast = useToast()
+  const [saveRegistration] = useSendRegistrationRequestMutation()
+  const uiState: IUiState = useAppSelector((state) => state.ui)
+
+  const handleSubmit = () => {
+    const { step, ...rest } = uiState
+
+    toast.promise(saveRegistration(rest).unwrap(), {
+      loading: {
+        title: 'Enviando registro',
+      },
+      error: (error) => {
+
+        return {
+          title: 'Error',
+          description: error?.message ?? error ?? 'Ha ocurrido un error',
+        }
+      },
+      success: {
+        title: 'Registro enviado',
+        description: 'Tu registro ha sido enviado con éxito',
+      },
+    })
+  }
   return (
     <Flex minH={'100vh'} justifyContent={'center'} alignItems={'center'}>
       <Box textAlign="center" width="100%" maxW="400px" mx="auto">
@@ -26,6 +52,7 @@ export const SelfieForm = () => {
           _active={{
             bg: 'brand.600',
           }}
+          onClick={handleSubmit}
         >
           Continuar
         </Button>
