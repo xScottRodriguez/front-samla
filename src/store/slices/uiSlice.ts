@@ -39,9 +39,12 @@ export const uiSlice = createSlice({
       
       Object.assign(state, action.payload)
     },
+    clearState: (state) => { 
+      state = initialState
+    }
   },
 })
 
-export const { nextStep, previousStep, setPersonalData } = uiSlice.actions
+export const { nextStep, previousStep, setPersonalData,clearState } = uiSlice.actions
 
 export default uiSlice.reducer
