@@ -19,7 +19,7 @@ interface FileUploadProps {
 
 const FileUpload: React.FC<FileUploadProps> = ({
   handler,
-  accept = '.pgn, .jpg, .jpeg',
+  accept = '.png, .jpg, .jpeg',
   allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'],
 }) => {
   const [dragging, setDragging] = useState(false)
@@ -51,10 +51,10 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
     const files = e.dataTransfer.files
 
-    if (files.length !== 2) {
+    if (files.length > 2) {
       return toast({
         title: 'Error',
-        description: 'Por favor solo arrastre exactamente 2 archivos',
+        description: 'Por favor, arrastre un máximo de 2 archivos.',
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -66,7 +66,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
     for (const file of files) {
       if (isValidFile(file)) {
-        // Simplificación: Asigna los archivos según el orden de llegada
         if (!validFiles.front) {
           validFiles.front = file
           validFileNames.front = file.name
@@ -77,13 +76,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
       }
     }
 
-    if (validFiles.front && validFiles.back) {
+    if (validFiles.front || validFiles.back) {
       setFileNames(validFileNames)
       handler(validFiles)
     } else {
       toast({
         title: 'Error',
-        description: 'Ambos archivos deben ser válidos y deben ser exactamente 2',
+        description: 'Todos los archivos deben ser válidos.',
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -111,10 +110,10 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    if (files && files.length !== 2) {
+    if (files && files.length > 2) {
       return toast({
         title: 'Error',
-        description: 'Por favor seleccione exactamente 2 archivos',
+        description: 'Por favor seleccione un máximo de 2 archivos.',
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -136,7 +135,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       }
     }
 
-    if (validFiles.front && validFiles.back) {
+    if (validFiles.front || validFiles.back) {
       setFileNames(validFileNames)
       handler(validFiles)
     }
@@ -181,8 +180,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
         </Stack>
         <DividerWithCircle />
         <Button onClick={handleClick} flexWrap={'wrap'}>Seleccionar Archivos</Button>
-        {fileNames.front && fileNames.back && (
-          <Text mt={4}>Archivos seleccionados: {fileNames.front} (frontal), {fileNames.back} (trasera)</Text>
+        {(fileNames.front || fileNames.back) && (
+          <Text mt={4}>
+            Archivos seleccionados: 
+            {fileNames.front && `${fileNames.front} (frontal)`} 
+            {fileNames.front && fileNames.back && ', '}
+            {fileNames.back && `${fileNames.back} (trasera)`}
+          </Text>
         )}
       </Box>
     </Box>

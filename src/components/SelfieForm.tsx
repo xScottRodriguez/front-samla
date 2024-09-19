@@ -51,6 +51,7 @@ export const SelfieForm = () => {
   }
 
   const handlerPhoto = (photo: File) => {
+    console.log({photo})
     dispatch(setPersonalData({ selfie: photo }))
   }
   return (
@@ -63,6 +64,7 @@ export const SelfieForm = () => {
         </Text>
         <Text>Sonríe y asegúrate de tener buena iluminación.</Text>
         <CameraCapture handlerPhoto={handlerPhoto} />
+
         <Button
           mt={4}
           bg={'brand.500'}
