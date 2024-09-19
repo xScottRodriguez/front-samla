@@ -3,6 +3,7 @@ import { IFormValues } from '../../services/interfaces'
 
 export interface IUiState extends IFormValues {
   step: number
+  isOpen: boolean
 }
 
 // Define the initial state using that type
@@ -21,6 +22,7 @@ const initialState: IUiState = {
   front: null,
   back: null,
   selfie: null,
+  isOpen: false,
 }
 
 export const uiSlice = createSlice({
@@ -52,10 +54,19 @@ export const uiSlice = createSlice({
       state.back = null
       state.selfie = null
     },
+
+    toggleModal: (state) => {
+      state.isOpen = !state.isOpen
+    },
   },
 })
 
-export const { nextStep, previousStep, setPersonalData, clearState } =
-  uiSlice.actions
+export const {
+  nextStep,
+  previousStep,
+  setPersonalData,
+  clearState,
+  toggleModal,
+} = uiSlice.actions
 
 export default uiSlice.reducer

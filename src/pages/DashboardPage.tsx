@@ -4,6 +4,9 @@ import { ColumnDef } from '@tanstack/react-table'
 import { TData } from '../services/interfaces'
 import { useGetRegistrationRequestsQuery } from '../services'
 import { Navbar } from '../components/Navbar'
+import { ModalCustom } from '../components/Modal'
+import { useAppDispatch } from '../hooks'
+import { toggleModal } from '../store'
 
 const columns: ColumnDef<TData, unknown>[] = [
   {
@@ -27,7 +30,7 @@ const columns: ColumnDef<TData, unknown>[] = [
         colorScheme="blue"
         size="sm"
         onClick={() => {
-          console.log(row)
+          open()
         }}
       >
         Ver Detalles
@@ -37,7 +40,12 @@ const columns: ColumnDef<TData, unknown>[] = [
 ]
 
 export const DashboardPage = () => {
-  const { data, isFetching } = useGetRegistrationRequestsQuery()
+  const { data,isFetching } = useGetRegistrationRequestsQuery()
+  
+  const dispatch = useAppDispatch()
+  const OnOpen = () => { 
+    dispatch(toggleModal())
+  }
 
   return (
     <>
@@ -52,6 +60,7 @@ export const DashboardPage = () => {
           isFetching={isFetching}
         />
       </Container>
+      <ModalCustom />
     </>
   )
 }
