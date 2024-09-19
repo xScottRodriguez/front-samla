@@ -30,7 +30,14 @@ function App() {
         />
 
         {/* Ruta pública */}
-        <Route path="/" element={<Multistep />} />
+        <Route
+          path="/"
+          element={
+            <PublicRoute>
+              <Multistep />
+            </PublicRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   )

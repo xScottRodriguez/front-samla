@@ -40,3 +40,20 @@ export interface User {
   id:    string;
   email: string;
 }
+export interface TData {
+  _id:                  string;
+  firstName:            string;
+  lastName:             string;
+  email:                string;
+  phoneNumber:          string;
+  identificationType:   string;
+  identificationNumber: string;
+  region:               string;
+  city:                 string;
+  address:              string;
+  monthlyIncome:        number;
+  identificationFront:  string;
+  identificationBack:   string;
+  selfie:               string;
+  __v:                  number;
+}
