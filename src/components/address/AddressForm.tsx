@@ -1,4 +1,4 @@
-import { Button, Flex, Stack, Text } from '@chakra-ui/react'
+import { Button, Flex, Stack, Text, useToast } from '@chakra-ui/react'
 import { StepLayout } from '../../layouts/StepLayout'
 import { FormHeading } from '../FormHeading'
 import { Form } from './Form'
@@ -6,7 +6,7 @@ import FileUpload from '../FileUpload'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useAppDispatch } from '../../hooks'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 import { nextStep, setPersonalData } from '../../store'
 
 interface IAddressForm {
@@ -32,15 +32,30 @@ export const AddressForm = () => {
   } = useForm<IAddressForm>({
     resolver: yupResolver(yupSchema),
   })
+  const { front, back } = useAppSelector((state) => state.ui)
   const dispatch = useAppDispatch()
 
+  const toast = useToast()
   const onSubmit = (data: IAddressForm) => {
-    dispatch(nextStep())
-    dispatch(setPersonalData(data))
+    if (front && back) {
+      dispatch(nextStep())
+      dispatch(setPersonalData(data))
+      return
+    }
+
+    toast({
+      title: 'Warning.',
+      description: 'Por favor sube una foto de tu documento de identidad',
+      status: 'warning',
+      duration: 9000,
+      isClosable: true,
+    })
   }
 
-  const handleFileUpload = (files: { front: File | null, back: File | null }) => { 
-    
+  const handleFileUpload = (files: {
+    front: File | null
+    back: File | null
+  }) => {
     dispatch(setPersonalData({ front: files.front, back: files.back }))
   }
   return (
