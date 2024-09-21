@@ -34,7 +34,10 @@ export const ModalCustom = () => {
         <ModalHeader></ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+          <Grid
+            templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
+            gap={6}
+          >
             <GridItem my="0.1rem" colSpan={1}>
               <Image
                 src={activeItem?.selfie ?? defaultImage}
@@ -47,7 +50,13 @@ export const ModalCustom = () => {
               <Heading my="0.7rem" size={'lg'}>
                 {activeItem?.firstName} {activeItem?.lastName}
               </Heading>
-              <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+              <Grid
+                templateColumns={{
+                  base: 'repeat(1, 1fr)',
+                  md: 'repeat(2, 1fr)',
+                }}
+                gap={6}
+              >
                 <GridItem my="0.1rem">
                   <Text>Correo electrónico:</Text>
                   <Text color="gray.500">{activeItem?.email}</Text>
@@ -89,12 +98,11 @@ export const ModalCustom = () => {
           <Heading size={'md'} color={'gray.500'}>
             Documento de identidad
           </Heading>
-          <Flex gap={5} my={'1.5rem'}>
+          <Flex gap={5} my={'1.5rem'} flexWrap={'wrap'}>
             <Image src={activeItem?.identificationFront ?? defaultImage} />
             <Image src={activeItem?.identificationBack ?? defaultImage} />
           </Flex>
         </ModalBody>
-       
       </ModalContent>
     </Modal>
   )

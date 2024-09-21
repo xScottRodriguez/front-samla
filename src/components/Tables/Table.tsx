@@ -37,7 +37,7 @@ export const Pagination = ({ table }: { table: any }) => {
   const currentPage = table.getState().pagination.pageIndex
 
   const paginationRange = useMemo(() => {
-    const totalPageNumbers = 5
+    const totalPageNumbers = 1
     const pageNeighbours = 1
 
     if (pageCount <= totalPageNumbers) {
