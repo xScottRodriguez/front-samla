@@ -174,7 +174,9 @@ export const TablePlugin = <TData,>({
               ))}
           </Tbody>
         </TableChakra>
-        <Pagination table={table} />
+        <Flex justify={'flex-end'}>
+          <Pagination table={table} />
+        </Flex>
       </TableContainer>
     </>
   )
