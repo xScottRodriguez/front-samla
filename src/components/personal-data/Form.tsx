@@ -14,12 +14,20 @@ import { Select } from 'chakra-react-select'
 import { StepButton } from '../StepButton'
 import { useDispatch } from 'react-redux'
 import { nextStep, setPersonalData } from '../../store'
+import { useGetDocumentsQuery } from '../../services'
+import { ICommonData } from '../../services/interfaces'
+
 const yupSchema = yup.object().shape({
   firstName: yup.string().required('Campo requerido'),
   lastName: yup.string().required('Campo requerido'),
   email: yup.string().email('Correo inválido').required('Campo requerido'),
   phoneNumber: yup.string().required('Campo requerido'),
-  identificationType: yup.string().required('Campo requerido'),
+  identificationType: yup
+    .object({
+      value: yup.string().required('Campo requerido'),
+      label: yup.string().required('Campo requerido'),
+    })
+    .required('Campo requerido'),
   identificationNumber: yup.string().required('Campo requerido'),
 })
 
@@ -28,10 +36,14 @@ interface FormValues {
   lastName: string
   email: string
   phoneNumber: string
-  identificationType: string
+  identificationType: {
+    value: string
+    label: string
+  }
   identificationNumber: string
 }
 export const Form = () => {
+  const { data: documents, isSuccess, isFetching } = useGetDocumentsQuery({})
   const {
     control,
     handleSubmit,
@@ -39,13 +51,18 @@ export const Form = () => {
   } = useForm<FormValues>({
     resolver: yupResolver(yupSchema),
   })
-
   const dispatch = useDispatch()
 
   const onSubmit = (data: FormValues) => {
     dispatch(nextStep())
-    dispatch(setPersonalData(data))
+    dispatch(
+      setPersonalData({
+        ...data,
+        identificationType: data.identificationType.label,
+      }),
+    )
   }
+
   return (
     <Stack as="form">
       <FormControl my={2}>
@@ -125,30 +142,29 @@ export const Form = () => {
       </FormControl>
       <FormControl my={2}>
         <FormLabel>Tipo Identificacion</FormLabel>
-        <Controller
-          name="identificationType"
-          control={control}
-          render={({ field }) => (
-            <Select
-              colorScheme="purple"
-              loadingMessage={() => 'Cargando...'}
-              isInvalid={!!errors.identificationType}
-              noOptionsMessage={() => 'Sin opciones'}
-              options={[
-                { label: 'Cédula de ciudadanía', value: 'CC' },
-                { label: 'Pasaporte', value: 'P' },
-              ]}
-              placeholder="Seleccionar tipo de identificación"
-              {...field}
-              onChange={(selectedOption) => {
-                field.onChange(selectedOption?.value)
-              }}
-              value={
-                field.value ? { label: field.value, value: field.value } : null
-              }
-            />
-          )}
-        />
+        {isFetching && <FormHelperText>Cargando...</FormHelperText>}
+        {isSuccess && (
+          <Controller
+            name="identificationType"
+            control={control}
+            render={({ field }) => (
+              <Select
+                loadingMessage={() => 'Cargando...'}
+                isInvalid={!!errors.identificationType}
+                noOptionsMessage={() => 'Sin opciones'}
+                options={documents.data.map((doc: ICommonData) => {
+                  return {
+                    label: doc.name,
+                    value: doc._id,
+                  }
+                })}
+                placeholder="Seleccionar tipo de identificación"
+                {...field}
+              />
+            )}
+          />
+        )}
+
         {errors.identificationType && (
           <FormHelperText color="red.500">
             {errors.identificationType.message}
@@ -175,9 +191,8 @@ export const Form = () => {
           </FormHelperText>
         )}
       </FormControl>
-      <Stack direction={{ base: 'column',md: 'row' }} spacing={4}>
-        
-      <StepButton handleSubmit={handleSubmit(onSubmit)} />
+      <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
+        <StepButton handleSubmit={handleSubmit(onSubmit)} />
       </Stack>
     </Stack>
   )

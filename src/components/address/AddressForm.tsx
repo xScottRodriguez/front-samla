@@ -9,15 +9,29 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { nextStep, setPersonalData } from '../../store'
 
+interface ICommonObject {
+  value: string
+  label: string
+}
 interface IAddressForm {
-  region: string
-  city: string
+  region: ICommonObject
+  city: ICommonObject
   address: string
   monthlyIncome: string
 }
 const yupSchema = yup.object().shape({
-  region: yup.string().required('Campo requerido'),
-  city: yup.string().required('Campo requerido'),
+  region: yup
+    .object({
+      value: yup.string().required('Campo requerido'),
+      label: yup.string().required('Campo requerido'),
+    })
+    .required('Campo requerido'),
+  city: yup
+    .object({
+      value: yup.string().required('Campo requerido'),
+      label: yup.string().required('Campo requerido'),
+    })
+    .required('Campo requerido'),
   address: yup
     .string()
     .min(35, 'Direccion muy corta (< 35)')
@@ -39,7 +53,12 @@ export const AddressForm = () => {
   const onSubmit = (data: IAddressForm) => {
     if (front && back) {
       dispatch(nextStep())
-      dispatch(setPersonalData(data))
+      dispatch(setPersonalData({
+        ...data,
+        region: data.region.label,
+        city: data.city.label,
+        
+      }))
       return
     }
 

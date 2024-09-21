@@ -86,11 +86,40 @@ export const appApi = createApi({
         url: '/auth/registration-requests',
         method: 'GET',
       }),
-      transformResponse: (response: ApiSuccess<TData[]>): TPagination<TData[]> => {
+      transformResponse: (
+        response: ApiSuccess<TData[]>,
+      ): TPagination<TData[]> => {
         return {
           data: response.data,
           meta: response.meta,
-        };
+        }
+      },
+    }),
+
+    getDocuments: builder.query({
+      query: () => ({ url: '/generals/documents', method: 'GET' }),
+    }),
+    getDepartments: builder.query({
+      query: () => ({
+        url: '/generals/departments',
+        method: 'GET',
+      }),
+    }),
+    getMunicipalities: builder.query({
+      query: ({ departmentId = '' }: { departmentId: string }) => {
+        const params = departmentId ? { departmentId } : null
+        if (!params) {
+          return {
+            url: '/generals/municipalities',
+            method: 'GET',
+          }
+        }
+
+        return {
+          url: `/generals/municipalities`,
+          method: 'GET',
+          params,
+        }
       },
     }),
   }),
@@ -100,4 +129,8 @@ export const {
   useSendRegistrationRequestMutation,
   useSignInMutation,
   useGetRegistrationRequestsQuery,
+  useGetDocumentsQuery,
+  useGetDepartmentsQuery,
+  useGetMunicipalitiesQuery,
+  useLazyGetMunicipalitiesQuery,
 } = appApi

@@ -25,25 +25,25 @@ export interface ApiError {
 }
 
 export interface Meta {
-  page: Page;
-  total: number;
+  page: Page
+  total: number
 }
 
 export interface Page {
-  next: null;
-  prev: null;
-  count: null;
+  next: null
+  prev: null
+  count: null
 }
 
 export interface ApiSuccess<T> {
-  status: number;
-  message: string;
-  data: T[] | T | null;
-  errors: null;
-  meta?: Meta;
+  status: number
+  message: string
+  data: T
+  errors: null
+  meta?: Meta
 }
 
-export type TPagination<T = any> = Pick<ApiSuccess<T>, 'meta' | 'data'>;
+export type TPagination<T = any> = Pick<ApiSuccess<T>, 'meta' | 'data'>
 
 export interface IUserResponse {
   user: User
@@ -71,3 +71,25 @@ export interface TData {
   selfie: string
   __v: number
 }
+
+export interface ICommonData {
+  _id: string
+  name: string
+  _v: string
+}
+
+export interface IcommonAdapter {
+  id: string
+  name: string
+  departmentId?: string
+}
+
+export interface IAdapterResponse {
+  label: string
+  value: string
+  departmentId?: string
+}
+export type IcommonAdapterWithoutDepartment = Omit<
+  IAdapterResponse,
+  'departmentId'
+>
