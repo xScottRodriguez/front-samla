@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Image, Text, useToast } from '@chakra-ui/react'
 import { useAppDispatch, useAppSelector } from '../hooks'
-import { clearState, IUiState, setPersonalData } from '../store'
+import { clearState, setPersonalData } from '../store'
 import { useSendRegistrationRequestMutation } from '../services'
 import CameraCapture from './CameraCapture'
 import { useState } from 'react'
@@ -9,12 +9,12 @@ export const SelfieForm = () => {
   const toast = useToast()
   const [saveRegistration] = useSendRegistrationRequestMutation()
   const [isLoading, setIsLoading] = useState(false)
-  const uiState: IUiState = useAppSelector((state) => state.ui)
+  const { step, isOpen, activeItem, ...rest } = useAppSelector(
+    (state) => state.ui,
+  )
   const { selfie } = useAppSelector((state) => state.ui)
   const dispatch = useAppDispatch()
   const handleSubmit = () => {
-    const { step, ...rest } = uiState
-
     if (!selfie) {
       toast({
         title: 'Error',
@@ -51,7 +51,7 @@ export const SelfieForm = () => {
   }
 
   const handlerPhoto = (photo: File) => {
-    console.log({photo})
+    console.log({ photo })
     dispatch(setPersonalData({ selfie: photo }))
   }
   return (

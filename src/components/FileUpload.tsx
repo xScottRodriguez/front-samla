@@ -176,7 +176,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
             }}
             boxSize={10}
           />
-          <Text mt={2}>Arrastrar aquí o hacer clic para seleccionar archivos</Text>
+          <Text mt={2}>Arrastrar aquí</Text>
         </Stack>
         <DividerWithCircle />
         <Button onClick={handleClick} flexWrap={'wrap'}>Seleccionar Archivos</Button>
