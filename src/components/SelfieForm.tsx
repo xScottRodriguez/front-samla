@@ -18,7 +18,7 @@ export const SelfieForm = () => {
     if (!selfie) {
       toast({
         title: 'Error',
-        description: 'Por favortoma una selfie',
+        description: 'Por favor toma una selfie',
         status: 'error',
         duration: 9000,
         isClosable: true,

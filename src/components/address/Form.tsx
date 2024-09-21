@@ -11,7 +11,6 @@ import {
   Controller,
   FieldErrors,
   UseFormSetValue,
-  useWatch,
 } from 'react-hook-form'
 import { FC, useState } from 'react'
 import { CustomNumberInput } from '../NumberInput'
@@ -20,7 +19,6 @@ import {
   useLazyGetMunicipalitiesQuery,
 } from '../../services'
 import { ICommonData } from '../../services/interfaces'
-import { useEffect } from 'react'
 interface ICommonObject {
   value: string
   label: string
@@ -51,7 +49,6 @@ export const Form: FC<Props> = ({ errors, control, setValue }) => {
   } = useGetDepartmentsQuery({})
   const [triggerFn, { data: munipality }] = useLazyGetMunicipalitiesQuery()
 
- 
   const handleRegionChange = (selectedRegion: SingleValue<ICommonObject>) => {
     setValue('region', selectedRegion as ICommonObject)
     if (selectedRegion) {
@@ -101,11 +98,11 @@ export const Form: FC<Props> = ({ errors, control, setValue }) => {
         <Controller
           name="city"
           control={control}
-          disabled={!departmentSelected}
           render={({ field }) => (
             <Select
               isDisabled={!departmentSelected}
               loadingMessage={() => 'Cargando...'}
+              isClearable
               isInvalid={!!errors.region}
               noOptionsMessage={() => 'Sin opciones'}
               options={munipality?.data.map((doc: ICommonData) => ({

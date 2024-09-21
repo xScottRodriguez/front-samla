@@ -36,7 +36,7 @@ const yupSchema = yup.object().shape({
     .required('Campo requerido'),
   address: yup
     .string()
-    .min(35, 'Direccion muy corta (< 35)')
+    .min(10, 'Direccion muy corta (< 10)')
     .required('Campo requerido'),
   monthlyIncome: yup.string().required('Campo requerido'),
 })
