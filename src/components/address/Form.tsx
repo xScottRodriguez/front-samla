@@ -5,8 +5,14 @@ import {
   Stack,
   Textarea,
 } from '@chakra-ui/react'
-import { Select } from 'chakra-react-select'
-import { Control, Controller, FieldErrors, useWatch } from 'react-hook-form'
+import { Select, SingleValue } from 'chakra-react-select'
+import {
+  Control,
+  Controller,
+  FieldErrors,
+  UseFormSetValue,
+  useWatch,
+} from 'react-hook-form'
 import { FC, useState } from 'react'
 import { CustomNumberInput } from '../NumberInput'
 import {
@@ -25,36 +31,37 @@ interface FormData {
   city: ICommonObject
   monthlyIncome: string
 }
+interface IAddressForm {
+  region: ICommonObject
+  city: ICommonObject
+  address: string
+  monthlyIncome: string
+}
 interface Props {
   control: Control<FormData>
   errors: FieldErrors<FormData>
+  setValue: UseFormSetValue<IAddressForm>
 }
-export const Form: FC<Props> = ({ errors, control }) => {
-  const { region } = useWatch({ control })
+export const Form: FC<Props> = ({ errors, control, setValue }) => {
   const [departmentSelected, setDepartmentSelected] = useState(false)
   const {
     isFetching,
     isSuccess,
     data: departments,
   } = useGetDepartmentsQuery({})
-  const [
-    triggerFn,
-    {
-      data: munipality,
-      isFetching: isMunicipalityFetching,
-    },
-  ] = useLazyGetMunicipalitiesQuery()
+  const [triggerFn, { data: munipality }] = useLazyGetMunicipalitiesQuery()
 
-  useEffect(() => {
-    if (region) {
-      triggerFn({
-        departmentId: region.value ?? '',
-      }).unwrap()
-      return setDepartmentSelected(true)
+ 
+  const handleRegionChange = (selectedRegion: SingleValue<ICommonObject>) => {
+    setValue('region', selectedRegion as ICommonObject)
+    if (selectedRegion) {
+      triggerFn({ departmentId: selectedRegion.value }).unwrap()
+      setDepartmentSelected(true)
+    } else {
+      setValue('city', { value: '', label: '' })
+      setDepartmentSelected(false)
     }
-    setDepartmentSelected(false)
-  }, [region])
-
+  }
   return (
     <Stack>
       <FormControl>
@@ -76,6 +83,7 @@ export const Form: FC<Props> = ({ errors, control }) => {
                 }))}
                 placeholder="Seleccionar"
                 {...field}
+                onChange={handleRegionChange}
               />
             )}
           />
@@ -89,27 +97,26 @@ export const Form: FC<Props> = ({ errors, control }) => {
       </FormControl>
       <FormControl>
         <FormLabel>Municipio</FormLabel>
-        {isMunicipalityFetching && <Select isLoading />}
-        
-          <Controller
-            name="city"
-            control={control}
-            disabled={!departmentSelected}
-            render={({ field }) => (
-              <Select
-                isDisabled={!departmentSelected}
-                loadingMessage={() => 'Cargando...'}
-                isInvalid={!!errors.region}
-                noOptionsMessage={() => 'Sin opciones'}
-                options={munipality?.data.map((doc: ICommonData) => ({
-                  label: doc.name,
-                  value: doc._id,
-                }))}
-                placeholder="Seleccionar"
-                {...field}
-              />
-            )}
-          />
+
+        <Controller
+          name="city"
+          control={control}
+          disabled={!departmentSelected}
+          render={({ field }) => (
+            <Select
+              isDisabled={!departmentSelected}
+              loadingMessage={() => 'Cargando...'}
+              isInvalid={!!errors.region}
+              noOptionsMessage={() => 'Sin opciones'}
+              options={munipality?.data.map((doc: ICommonData) => ({
+                label: doc.name,
+                value: doc._id,
+              }))}
+              placeholder="Seleccionar"
+              {...field}
+            />
+          )}
+        />
         {errors.city && (
           <FormHelperText color={'red.500'}>
             {errors.city.message}

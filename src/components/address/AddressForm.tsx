@@ -25,12 +25,14 @@ const yupSchema = yup.object().shape({
       value: yup.string().required('Campo requerido'),
       label: yup.string().required('Campo requerido'),
     })
+    .nullable()
     .required('Campo requerido'),
   city: yup
     .object({
       value: yup.string().required('Campo requerido'),
       label: yup.string().required('Campo requerido'),
     })
+    .nullable()
     .required('Campo requerido'),
   address: yup
     .string()
@@ -43,6 +45,7 @@ export const AddressForm = () => {
     control,
     formState: { errors },
     handleSubmit,
+    setValue,
   } = useForm<IAddressForm>({
     resolver: yupResolver(yupSchema),
   })
@@ -53,12 +56,13 @@ export const AddressForm = () => {
   const onSubmit = (data: IAddressForm) => {
     if (front && back) {
       dispatch(nextStep())
-      dispatch(setPersonalData({
-        ...data,
-        region: data.region.label,
-        city: data.city.label,
-        
-      }))
+      dispatch(
+        setPersonalData({
+          ...data,
+          region: data.region.label ?? null,
+          city: data.city.label ?? null,
+        }),
+      )
       return
     }
 
@@ -82,7 +86,7 @@ export const AddressForm = () => {
       <Flex p={8} flex={1} justifyContent={'center'} alignItems={'center'}>
         <Stack spacing={6} w={'full'} maxW={'2xl'}>
           <FormHeading text={'Datos de Vivienda'} />
-          <Form control={control} errors={errors} />
+          <Form control={control} errors={errors} setValue={setValue} />
         </Stack>
       </Flex>
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
