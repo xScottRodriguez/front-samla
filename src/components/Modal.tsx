@@ -38,12 +38,12 @@ export const ModalCustom = () => {
             templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
             gap={6}
           >
-            <GridItem my="0.1rem" colSpan={1}>
+            <GridItem my="0.1rem" colSpan={{ base: 2, md: 1 }}>
               <Image
                 src={activeItem?.selfie ?? defaultImage}
-                objectFit="cover" // Esto asegura que la imagen cubra todo el área disponible
-                width="100%" // Asegura que la imagen tome todo el ancho disponible
-                height="100%" // Asegura que la imagen tome todo el alto disponible
+                objectFit="cover"
+                width="100%"
+                height="100%"
               />
             </GridItem>
             <GridItem colSpan={2}>
@@ -99,8 +99,18 @@ export const ModalCustom = () => {
             Documento de identidad
           </Heading>
           <Flex gap={5} my={'1.5rem'} flexWrap={'wrap'}>
-            <Image src={activeItem?.identificationFront ?? defaultImage} />
-            <Image src={activeItem?.identificationBack ?? defaultImage} />
+            <Image
+              objectFit="cover"
+              width={{ base: '100%', md: '30%' }}
+              height={{ base: '100%', md: '30%' }}
+              src={activeItem?.identificationFront ?? defaultImage}
+            />
+            <Image
+              objectFit="cover"
+              width={{ base: '100%', md: '30%' }}
+              height={{ base: '100%', md: '30%' }}
+              src={activeItem?.identificationBack ?? defaultImage}
+            />
           </Flex>
         </ModalBody>
       </ModalContent>

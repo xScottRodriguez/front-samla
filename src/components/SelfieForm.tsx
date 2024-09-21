@@ -51,7 +51,6 @@ export const SelfieForm = () => {
   }
 
   const handlerPhoto = (photo: File) => {
-    console.log({ photo })
     dispatch(setPersonalData({ selfie: photo }))
   }
   return (

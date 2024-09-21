@@ -39,9 +39,7 @@ const CameraCapture: React.FC<Props> = ({ handlerPhoto }) => {
     checkCameraAvailability()
 
     return () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop())
-      }
+      stream?.getTracks().forEach((track) => track.stop())
     }
   }, [])
 

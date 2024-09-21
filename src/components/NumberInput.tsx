@@ -1,4 +1,7 @@
 import {
+  Input,
+  InputGroup,
+  InputLeftElement,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -17,21 +20,19 @@ export const CustomNumberInput: FC<ControllerRenderProps<FormData>> = ({
   value,
   name,
 }) => {
-  const format = (val: string) => `$` + val
-  const parse = (val: string) => val.replace(/^\$/, '')
-
   return (
-    <NumberInput
-      value={format(value as string)}
-      onChange={(valString) => onChange(parse(valString))}
-      name={name}
-      aria-placeholder={'Ingresar cantidad'}
-    >
-      <NumberInputField />
-      <NumberInputStepper>
-        <NumberIncrementStepper />
-        <NumberDecrementStepper />
-      </NumberInputStepper>
-    </NumberInput>
+    <InputGroup w="100%">
+      <InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
+        $
+      </InputLeftElement>
+      <Input
+        onChange={onChange}
+        value={value}
+        name={name}
+        type="number"
+        placeholder="Ingresar cantidad"
+        min={0}
+      />
+    </InputGroup>
   )
 }
