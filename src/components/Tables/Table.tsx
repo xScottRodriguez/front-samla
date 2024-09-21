@@ -19,7 +19,7 @@ import {
   Button,
 } from '@chakra-ui/react'
 import { flexRender } from '@tanstack/react-table'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Loader } from '../Loader'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
@@ -29,9 +29,6 @@ interface TablePluginProps<TData> {
   initialPageSize?: number
   rowPerPagination?: number[]
   isFetching?: boolean
-  filtering?: string
-  onFilteringChange?: (value: string) => void
-  isInternalFiltering?: boolean
   contextMenu?: (e: React.MouseEvent<HTMLTableElement, MouseEvent>) => void
 }
 
@@ -105,14 +102,9 @@ export const Pagination = ({ table }: { table: any }) => {
 export const TablePlugin = <TData,>({
   columns,
   data = [],
-  initialPageSize = 25,
+  initialPageSize = 15,
   isFetching = false,
-  filtering = '',
-  onFilteringChange,
-  isInternalFiltering = true,
 }: TablePluginProps<TData>) => {
-  const [internalFiltering, setInternalFiltering] = useState<string>('')
-
   const table = useReactTable({
     columns,
     data,
@@ -125,22 +117,7 @@ export const TablePlugin = <TData,>({
         pageSize: initialPageSize,
       },
     },
-    state: {
-      globalFilter: isInternalFiltering ? internalFiltering : filtering,
-    },
-    onGlobalFilterChange: isInternalFiltering
-      ? setInternalFiltering
-      : onFilteringChange,
   })
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    if (isInternalFiltering) {
-      return setInternalFiltering(value)
-    } else {
-      return onFilteringChange?.(value)
-    }
-  }
 
   return (
     <>

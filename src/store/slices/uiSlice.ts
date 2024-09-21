@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IFormValues } from '../../services/interfaces'
+import { IFormValues, TData } from '../../services/interfaces'
 
 export interface IUiState extends IFormValues {
   step: number
   isOpen: boolean
+  activeItem: TData | null
 }
 
 // Define the initial state using that type
@@ -23,6 +24,7 @@ const initialState: IUiState = {
   back: null,
   selfie: null,
   isOpen: false,
+  activeItem: null,
 }
 
 export const uiSlice = createSlice({
@@ -58,6 +60,12 @@ export const uiSlice = createSlice({
     toggleModal: (state) => {
       state.isOpen = !state.isOpen
     },
+    setActiveItem: (state, action: PayloadAction<TData>) => {
+      state.activeItem = action.payload
+    },
+    clearActiveItem: (state) => {
+      state.activeItem = null
+    },
   },
 })
 
@@ -67,6 +75,8 @@ export const {
   setPersonalData,
   clearState,
   toggleModal,
+  clearActiveItem,
+  setActiveItem,
 } = uiSlice.actions
 
 export default uiSlice.reducer

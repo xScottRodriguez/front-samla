@@ -1,12 +1,11 @@
-import { Button, Container, Heading } from '@chakra-ui/react'
+import { Container, Heading } from '@chakra-ui/react'
 import { TablePlugin } from '../components/Tables/Table'
 import { ColumnDef } from '@tanstack/react-table'
 import { TData } from '../services/interfaces'
 import { useGetRegistrationRequestsQuery } from '../services'
 import { Navbar } from '../components/Navbar'
 import { ModalCustom } from '../components/Modal'
-import { useAppDispatch } from '../hooks'
-import { toggleModal } from '../store'
+import { Options } from '../components'
 
 const columns: ColumnDef<TData, unknown>[] = [
   {
@@ -24,28 +23,12 @@ const columns: ColumnDef<TData, unknown>[] = [
   {
     header: 'Acciones',
     accessorKey: 'id',
-    cell: (row) => (
-      <Button
-        variant={'link'}
-        colorScheme="blue"
-        size="sm"
-        onClick={() => {
-          open()
-        }}
-      >
-        Ver Detalles
-      </Button>
-    ),
+    cell: ({ row: { original } }) => <Options row={original} />,
   },
 ]
 
 export const DashboardPage = () => {
-  const { data,isFetching } = useGetRegistrationRequestsQuery()
-  
-  const dispatch = useAppDispatch()
-  const OnOpen = () => { 
-    dispatch(toggleModal())
-  }
+  const { data, isFetching } = useGetRegistrationRequestsQuery()
 
   return (
     <>

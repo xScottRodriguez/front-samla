@@ -1,9 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Multistep } from './components'
-import { Login } from './components/login/Login'
+import { Login, DashboardPage } from './pages'
 import { PrivateRoute } from './components/routes/PrivateRoute'
 import { PublicRoute } from './components/routes/PublicRoute'
-import { DashboardPage } from './pages/DashboardPage'
 
 function App() {
   return (

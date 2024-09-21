@@ -14,13 +14,14 @@ import {
   useToast,
   FormHelperText,
 } from '@chakra-ui/react'
-import { BrandImage } from '../BrandImage'
+import { BrandImage } from '../components/BrandImage'
 import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useSignInMutation } from '../../services'
-import { setLocalStorage } from '../../utils'
-import { IUserResponse } from '../../services/interfaces'
+import { useSignInMutation } from '../services'
+import { setLocalStorage } from '../utils'
+import { IUserResponse } from '../services/interfaces'
+import { useNavigate } from 'react-router-dom'
 
 const loginSChema = yup.object().shape({
   email: yup.string().email().required(),
@@ -34,6 +35,7 @@ interface ILogin {
 
 export const Login = () => {
   const [triggerSignIn] = useSignInMutation()
+  const navigate = useNavigate()
   const {
     handleSubmit,
     control,
@@ -50,7 +52,7 @@ export const Login = () => {
       success: (response: IUserResponse) => {
         setLocalStorage('token', response.token)
         setLocalStorage('user', response.user)
-
+        navigate('/dashboard', { replace: true })
         return {
           title: 'Inicio de sesión exitoso',
           description: 'Bienvenido',
