@@ -108,7 +108,7 @@ export const ModalCustom = () => {
             <Image
               objectFit="cover"
               width={{ base: '100%', md: '30%' }}
-              height={{ base: '100%', md: '30%' }}
+              height={{ base: '30%', md: '30%' }}
               src={activeItem?.identificationBack ?? defaultImage}
             />
           </Flex>
