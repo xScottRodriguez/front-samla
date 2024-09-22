@@ -36,7 +36,7 @@ const handleFormData = (body: Record<string, any>) => {
 export const appApi = createApi({
   reducerPath: 'appApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL ?? 'http://172.18.0.3:3001/api',
+    baseUrl: import.meta.env.VITE_API_URL ,
     prepareHeaders: (headers: Headers) => {
       const token: string = getLocalStorage<string>('token')
       if (token) {

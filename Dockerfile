@@ -25,6 +25,6 @@ COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 
 # Expose port 80 for Nginx
 EXPOSE 80
-
+ENV VITE_API_URL=http://localhost:3001/api
 # Start Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
