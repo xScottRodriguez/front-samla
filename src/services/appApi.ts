@@ -38,7 +38,6 @@ const handleFormData = (body: Record<string, any>) => {
 
   return formData
 }
-const UnAuthorized = 401
 const baseQuery = originalFetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_URL,
   prepareHeaders: (headers) => {
