@@ -32,10 +32,11 @@ const handleFormData = (body: Record<string, any>) => {
 
   return formData
 }
+
 export const appApi = createApi({
   reducerPath: 'appApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL ?? 'http://localhost:5173/api',
+    baseUrl: import.meta.env.VITE_API_URL ?? 'http://172.18.0.3:3001/api',
     prepareHeaders: (headers: Headers) => {
       const token: string = getLocalStorage<string>('token')
       if (token) {
