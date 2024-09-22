@@ -1,4 +1,10 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import {
+  BaseQueryFn,
+  createApi,
+  FetchArgs,
+  FetchBaseQueryError,
+  fetchBaseQuery as originalFetchBaseQuery,
+} from '@reduxjs/toolkit/query/react'
 import {
   ApiError,
   ApiSuccess,
@@ -7,7 +13,7 @@ import {
   TData,
   TPagination,
 } from './interfaces'
-import { getLocalStorage } from '../utils'
+import { clearLocalStorage, getLocalStorage } from '../utils'
 const handleFormData = (body: Record<string, any>) => {
   const formData = new FormData()
 
@@ -32,19 +38,37 @@ const handleFormData = (body: Record<string, any>) => {
 
   return formData
 }
+const UnAuthorized = 401
+const baseQuery = originalFetchBaseQuery({
+  baseUrl: import.meta.env.VITE_API_URL,
+  prepareHeaders: (headers) => {
+    const token = getLocalStorage('token')
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`)
+    }
+    return headers
+  },
+})
+
+const baseQueryWithReauth: BaseQueryFn<
+  string | FetchArgs, // Tipo de los argumentos
+  unknown, // Tipo del resultado (puede ser unknown si no tienes un tipo definido)
+  FetchBaseQueryError // Tipo de los errores
+> = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions)
+
+  if (result.error && result.error.data==='Unauthorized') {
+    clearLocalStorage()
+    window.location.href = '/login'
+    return { error: result.error }
+  }
+
+  return result
+}
 
 export const appApi = createApi({
   reducerPath: 'appApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL ,
-    prepareHeaders: (headers: Headers) => {
-      const token: string = getLocalStorage<string>('token')
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`)
-      }
-      return headers
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     sendRegistrationRequest: builder.mutation<ApiSuccess<unknown>, IFormValues>(
       {
