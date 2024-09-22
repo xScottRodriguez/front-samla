@@ -1,13 +1,4 @@
-import {
-  Input,
-  InputGroup,
-  InputLeftElement,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-} from '@chakra-ui/react'
+import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import { FC } from 'react'
 import { ControllerRenderProps } from 'react-hook-form'
 
