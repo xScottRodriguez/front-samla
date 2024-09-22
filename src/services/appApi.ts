@@ -41,7 +41,7 @@ const handleFormData = (body: Record<string, any>) => {
 console.dir(import.meta.env)
 console.dir(import.meta.env.VITE_API_URL)
 const baseQuery = originalFetchBaseQuery({
-  baseUrl: import.meta.env.VITE_API_URL,
+  baseUrl: import.meta.env.VITE_API_URL??'http://38.242.159.186:3001/api',
   prepareHeaders: (headers) => {
     const token = getLocalStorage('token')
     if (token) {
