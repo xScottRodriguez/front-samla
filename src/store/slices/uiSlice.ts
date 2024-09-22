@@ -9,7 +9,7 @@ export interface IUiState extends IFormValues {
 
 // Define the initial state using that type
 const initialState: IUiState = {
-  step: 3,
+  step: 1,
   firstName: '',
   lastName: '',
   email: '',

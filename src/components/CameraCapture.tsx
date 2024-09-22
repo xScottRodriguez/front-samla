@@ -3,6 +3,9 @@ import { Button, Box, Image, VStack, Flex, Text } from '@chakra-ui/react'
 import FileUpload from './FileUpload'
 import * as faceapi from 'face-api.js'
 
+
+import { dataUrlToFile } from '../utils'
+
 interface Props {
   handlerPhoto: (photo: File) => void
 }
@@ -76,21 +79,6 @@ const CameraCapture: React.FC<Props> = ({ handlerPhoto }) => {
     })
   }
 
-  const dataUrlToFile = (dataUrl: string, filename: string): File => {
-    const dataUrlParts = dataUrl.split(',')
-    const mimeString = dataUrlParts[0].split(':')[1].split(';')[0]
-    const byteString = atob(dataUrlParts[1])
-    const arrayBuffer = new ArrayBuffer(byteString.length)
-    const uint8Array = new Uint8Array(arrayBuffer)
-
-    for (let i = 0; i < byteString.length; i++) {
-      uint8Array[i] = byteString.charCodeAt(i)
-    }
-
-    const blob = new Blob([arrayBuffer], { type: mimeString })
-    return new File([blob], filename, { type: mimeString })
-  }
-
   const takePhoto = () => {
     const canvas = canvasRef.current
     if (canvas && videoRef.current) {
@@ -147,13 +135,17 @@ const CameraCapture: React.FC<Props> = ({ handlerPhoto }) => {
     }, 1000)
   }
 
- 
-
   return (
     <Flex direction="column" align="center" justify="center" p={4}>
       {hasCamera ? (
         <VStack spacing={4} align="center">
-          <Box boxSize="sm" borderRadius="md" overflow="hidden" m={2} position="relative">
+          <Box
+            boxSize="sm"
+            borderRadius="md"
+            overflow="hidden"
+            m={2}
+            position="relative"
+          >
             <video
               ref={videoRef}
               autoPlay
@@ -209,50 +201,3 @@ const CameraCapture: React.FC<Props> = ({ handlerPhoto }) => {
 }
 
 export default CameraCapture
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- // const takePhoto = () => {
-  //   const canvas = canvasRef.current
-  //   const video = videoRef.current
-  //   if (canvas && video) {
-  //     canvas.width = video.videoWidth
-  //     canvas.height = video.videoHeight
-  //     const context = canvas.getContext('2d')
-  //     if (context) {
-  //       context.drawImage(video, 0, 0)
-  //       const dataUrl = canvas.toDataURL('image/png')
-  //       setPhoto(dataUrl)
-
-  //       const dataUrlParts = dataUrl.split(',')
-  //       const mimeString = dataUrlParts[0].split(':')[1].split(';')[0]
-  //       const byteString = atob(dataUrlParts[1])
-  //       const arrayBuffer = new ArrayBuffer(byteString.length)
-  //       const uint8Array = new Uint8Array(arrayBuffer)
-
-  //       for (let i = 0; i < byteString.length; i++) {
-  //         uint8Array[i] = byteString.charCodeAt(i)
-  //       }
-
-  //       const blob = new Blob([arrayBuffer], { type: mimeString })
-  //       const file = new File([blob], 'photo.png', { type: mimeString })
-
-  //       handlerPhoto(file)
-  //     } else {
-  //       console.error('Failed to get canvas context')
-  //     }
-  //   } else {
-  //     console.error('Canvas or video element not found')
-  //   }
-  // }

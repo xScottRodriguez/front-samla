@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { nextStep, setPersonalData } from '../../store'
+import { clearState, nextStep, setPersonalData } from '../../store'
 
 interface ICommonObject {
   value: string
@@ -81,6 +81,10 @@ export const AddressForm = () => {
   }) => {
     dispatch(setPersonalData({ front: files.front, back: files.back }))
   }
+
+  const handleCancel = () => {
+    dispatch(clearState())
+  }
   return (
     <StepLayout>
       <Flex p={8} flex={1} justifyContent={'center'} alignItems={'center'}>
@@ -96,7 +100,7 @@ export const AddressForm = () => {
           </Text>
           <FileUpload handler={handleFileUpload} />
           <Stack flexDir={'row'} justify={'flex-end'}>
-            <Button size={'lg'} w="fit-content">
+            <Button size={'lg'} w="fit-content" onClick={handleCancel}>
               Cancelar
             </Button>
             <Button
