@@ -3,7 +3,6 @@ import { Button, Box, Image, VStack, Flex, Text } from '@chakra-ui/react'
 import FileUpload from './FileUpload'
 import * as faceapi from 'face-api.js'
 
-
 import { dataUrlToFile } from '../utils'
 
 interface Props {
@@ -33,7 +32,11 @@ const CameraCapture: React.FC<Props> = ({ handlerPhoto }) => {
 
   const checkCameraAvailability = async () => {
     try {
-      const devices = await navigator.mediaDevices.enumerateDevices()
+      if (!navigator.mediaDevices) {
+        console.log('No media devices')
+        return
+      }
+      const devices = await navigator.mediaDevices?.enumerateDevices()
       const hasVideoInput = devices.some(
         (device) => device.kind === 'videoinput',
       )
