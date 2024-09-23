@@ -38,8 +38,9 @@ const handleFormData = (body: Record<string, any>) => {
 
   return formData
 }
+console.log({VITE_API_URL: import.meta.env.VITE_API_URL})
 const baseQuery = originalFetchBaseQuery({
-  baseUrl: import.meta.env.VITE_API_URL??'http://scott-rodriguez.xyz:3001/api',
+  baseUrl: import.meta.env.VITE_API_URL ?? 'https://scott-rodriguez.xyz/api',
   prepareHeaders: (headers) => {
     const token = getLocalStorage('token')
     if (token) {
