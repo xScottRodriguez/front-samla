@@ -136,8 +136,9 @@ export const SelfieForm = () => {
       inputDescriptor,
       referenceDescriptor,
     )
-    const threshold = 0.72
+    const threshold = 0.80
 
+    
     return distance <= threshold
   }
   const loadModels = () => {

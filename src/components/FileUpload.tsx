@@ -12,18 +12,23 @@ import {
 import { DividerWithCircle } from './Divider'
 
 interface FileUploadProps {
-  handler: (files: { front: File | null, back: File | null }) => void
+  handler: (files: { front: File | null; back: File | null }) => void
   accept?: string // Aceptar el tipo MIME permitido como una cadena
   allowedMimeTypes?: string[] // Lista de tipos MIME permitidos
+  maxFiles?: 1 | 2
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({
   handler,
   accept = '.png, .jpg, .jpeg',
   allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'],
+  maxFiles = 2,
 }) => {
   const [dragging, setDragging] = useState(false)
-  const [fileNames, setFileNames] = useState<{ front: string | null, back: string | null }>({ front: null, back: null })
+  const [fileNames, setFileNames] = useState<{
+    front: string | null
+    back: string | null
+  }>({ front: null, back: null })
   const toast = useToast()
 
   const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
@@ -51,25 +56,31 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
     const files = e.dataTransfer.files
 
-    if (files.length > 2) {
+    if (files.length > maxFiles) {
       return toast({
         title: 'Error',
-        description: 'Por favor, arrastre un máximo de 2 archivos.',
+        description: `Por favor, arrastre un máximo de ${maxFiles} archivos.`,
         status: 'error',
         duration: 5000,
         isClosable: true,
       })
     }
 
-    const validFiles: { front: File | null, back: File | null } = { front: null, back: null }
-    const validFileNames: { front: string | null, back: string | null } = { front: null, back: null }
+    const validFiles: { front: File | null; back: File | null } = {
+      front: null,
+      back: null,
+    }
+    const validFileNames: { front: string | null; back: string | null } = {
+      front: null,
+      back: null,
+    }
 
     for (const file of files) {
       if (isValidFile(file)) {
         if (!validFiles.front) {
           validFiles.front = file
           validFileNames.front = file.name
-        } else {
+        } else if (maxFiles === 2) {
           validFiles.back = file
           validFileNames.back = file.name
         }
@@ -94,7 +105,9 @@ const FileUpload: React.FC<FileUploadProps> = ({
     if (!allowedMimeTypes.includes(file.type)) {
       toast({
         title: 'Error',
-        description: `Archivo no válido. Tipos permitidos: ${allowedMimeTypes.join(', ')}`,
+        description: `Archivo no válido. Tipos permitidos: ${allowedMimeTypes.join(
+          ', ',
+        )}`,
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -110,25 +123,30 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    if (files && files.length > 2) {
+    if (files && files.length > maxFiles) {
       return toast({
         title: 'Error',
-        description: 'Por favor seleccione un máximo de 2 archivos.',
+        description: `Por favor seleccione un máximo de ${maxFiles} archivo(s).`,
         status: 'error',
         duration: 5000,
         isClosable: true,
       })
     }
-
-    const validFiles: { front: File | null, back: File | null } = { front: null, back: null }
-    const validFileNames: { front: string | null, back: string | null } = { front: null, back: null }
+    const validFiles: { front: File | null; back: File | null } = {
+      front: null,
+      back: null,
+    }
+    const validFileNames: { front: string | null; back: string | null } = {
+      front: null,
+      back: null,
+    }
 
     for (const file of files!) {
       if (isValidFile(file)) {
         if (!validFiles.front) {
           validFiles.front = file
           validFileNames.front = file.name
-        } else {
+        } else if (maxFiles === 2) {
           validFiles.back = file
           validFileNames.back = file.name
         }
@@ -165,7 +183,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
         id="file-upload"
         display="none"
         accept={accept}
-        multiple
+        multiple={maxFiles === 2}
         onChange={handleChange}
       />
       <Box>
@@ -179,11 +197,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
           <Text mt={2}>Arrastrar aquí</Text>
         </Stack>
         <DividerWithCircle />
-        <Button onClick={handleClick} flexWrap={'wrap'}>Seleccionar Archivos</Button>
+        <Button onClick={handleClick} flexWrap={'wrap'}>
+          Seleccionar Archivos
+        </Button>
         {(fileNames.front || fileNames.back) && (
           <Text mt={4}>
-            Archivos seleccionados: 
-            {fileNames.front && `${fileNames.front} (frontal)`} 
+            Archivos seleccionados:
+            {fileNames.front && `${fileNames.front} (frontal)`}
             {fileNames.front && fileNames.back && ', '}
             {fileNames.back && `${fileNames.back} (trasera)`}
           </Text>
