@@ -186,7 +186,7 @@ const CameraCapture: React.FC<Props> = ({ handlerPhoto }) => {
             No se ha detectado ninguna cámara. Por favor, cargue un archivo en
             su lugar.
           </Text>
-          <FileUpload handler={handleFileChange} />
+          <FileUpload handler={handleFileChange} maxFiles={1} />
           {photo && (
             <Image
               src={photo}
